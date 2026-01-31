@@ -23,14 +23,3 @@ class Offer(BaseModel):
 class Offers(BaseModel):
     best_offer: float | None  # Цена лучшего оффера (в руб.)
     offers: list[Offer]  # Список офферов
-
-
-class MarketInfo(BaseModel):
-    sell_offers: Offers  # Офферы на продажу
-    buy_offers: Offers  # Офферы на покупку
-    history: History  # История продаж
-
-
-class SellDecisionDTO(BaseModel):
-    price: float  # Цена продажи (в руб.)
-    time_of_next_check: datetime  # Следующая проверка, нераньше чем

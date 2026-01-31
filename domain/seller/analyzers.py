@@ -1,6 +1,5 @@
-from datetime import datetime, timedelta, UTC
 from .value_objects import SellItemVO
-from .ports.dto.sell import MarketInfo
+from .ports.dto import MarketInfo
 from .base import SalesMarketAnalyzer
 
 
@@ -12,12 +11,11 @@ class StandardSalesMarketAnalyzer(SalesMarketAnalyzer):
             return best_offer - item.min_step
         return item.min_price
 
-    def calc_time_of_next_check(self) -> datetime:
-        return datetime.now(UTC) + timedelta(minutes=5)
 
-
-class AnalyzersFactory:
+class SalesAnalyzersFactory:
 
     @staticmethod
-    def get_standart_sales_analyzer(market_info: MarketInfo) -> SalesMarketAnalyzer:
+    def get_standart_sales_analyzer(
+        market_info: MarketInfo,
+    ) -> StandardSalesMarketAnalyzer:
         return StandardSalesMarketAnalyzer(market_info)

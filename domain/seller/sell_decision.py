@@ -1,6 +1,7 @@
-from .base import Decision, SalesMarketAnalyzer
+from domain.common.base import Decision
+from .base import SalesMarketAnalyzer
 from .value_objects import SellItemVO
-from .ports.dto.sell import SellDecisionDTO
+from .ports.dto import SellDecisionDTO
 
 
 class SellDecision(Decision):
@@ -15,7 +16,4 @@ class SellDecision(Decision):
         self._analyzer = analyzer
 
     def decide(self) -> SellDecisionDTO:
-        return SellDecisionDTO(
-            price=self._analyzer.calc_selling_price(self._item),
-            time_of_next_check=self._analyzer.calc_time_of_next_check(),
-        )
+        return SellDecisionDTO(price=self._analyzer.calc_selling_price(self._item))
