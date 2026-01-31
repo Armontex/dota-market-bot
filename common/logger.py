@@ -1,19 +1,24 @@
 import sys
 from loguru import logger
 from core.const import LOG_DIR
+from core.settings import settings
 
-LOG_FORMAT = "<green>{time:HH:mm:ss}</green> | <level>{level}</level> | " \
-             "{name}:{function}:{line} - {message} | extra={extra}"
+LOG_FORMAT = (
+    "<green>{time:HH:mm:ss}</green> | <level>{level}</level> | "
+    "{name}:{function}:{line} - {message} | extra={extra}"
+)
 
 logger.remove()
 
 LOG_DIR.mkdir(exist_ok=True)
 
-logger.add(LOG_DIR / "logs.log",
-           rotation="10 MB",
-           retention="10 days",
-           compression="zip",
-           level="INFO",
-           format=LOG_FORMAT)
+logger.add(
+    LOG_DIR / "logs.log",
+    rotation="10 MB",
+    retention="10 days",
+    compression="zip",
+    level=settings.log_level,
+    format=LOG_FORMAT,
+)
 
 logger.add(sys.stdout, colorize=True, level="DEBUG", format=LOG_FORMAT)
