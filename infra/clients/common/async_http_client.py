@@ -1,5 +1,11 @@
 from httpx import AsyncClient, Response
 from httpx import HTTPStatusError, RequestError
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    wait_exponential,
+    retry_if_exception_type,
+)
 from common.logger import logger
 from .enums import RequestMethod
 
@@ -15,38 +21,44 @@ class AsyncHTTPClient:
 
         kwargs.setdefault("timeout", self.DEFAULT_TIMEOUT)
 
-    async def get(self, url: str, **kwargs) -> Response:
-        return await self._request(RequestMethod.GET, url, **kwargs)
+    async def get(self, endpoint: str, **kwargs) -> Response:
+        return await self.request(RequestMethod.GET, endpoint, **kwargs)
 
-    async def post(self, url: str, **kwargs) -> Response:
-        return await self._request(RequestMethod.POST, url, **kwargs)
+    async def post(self, endpoint: str, **kwargs) -> Response:
+        return await self.request(RequestMethod.POST, endpoint, **kwargs)
 
-    async def put(self, url: str, **kwargs) -> Response:
-        return await self._request(RequestMethod.PUT, url, **kwargs)
+    async def put(self, endpoint: str, **kwargs) -> Response:
+        return await self.request(RequestMethod.PUT, endpoint, **kwargs)
 
-    async def delete(self, url: str, **kwargs) -> Response:
-        return await self._request(RequestMethod.DELETE, url, **kwargs)
+    async def delete(self, endpoint: str, **kwargs) -> Response:
+        return await self.request(RequestMethod.DELETE, endpoint, **kwargs)
 
-    async def patch(self, url: str, **kwargs) -> Response:
-        return await self._request(RequestMethod.PATCH, url, **kwargs)
+    async def patch(self, endpoint: str, **kwargs) -> Response:
+        return await self.request(RequestMethod.PATCH, endpoint, **kwargs)
 
-    async def _request(self, method: str, url: str, **kwargs) -> Response:
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10),
+        retry=retry_if_exception_type((HTTPStatusError, RequestError)),
+        reraise=True,
+    )
+    async def request(self, method: str, endpoint: str, **kwargs) -> Response:
         if not self._client:
             raise RuntimeError("HTTP client не инициализирован.")
         try:
-            logger.bind(method=method, url=url, kwargs=kwargs).debug(
+            logger.bind(method=method, endpoint=endpoint, kwargs=kwargs).debug(
                 f"Отправка запроса."
             )
-            response = await self._client.request(method, url, **kwargs)
+            response = await self._client.request(method, endpoint, **kwargs)
             response.raise_for_status()
             return response
         except HTTPStatusError as e:
-            logger.bind(method=method, url=url).error(
+            logger.bind(method=method, endpoint=endpoint).error(
                 f"HTTP ошибка: {e.response.status_code}"
             )
             raise
         except RequestError as e:
-            logger.bind(method=method, url=url, kwargs=kwargs).error(
+            logger.bind(method=method, endpoint=endpoint, kwargs=kwargs).error(
                 f"Ошибка запроса: {str(e)}"
             )
             raise

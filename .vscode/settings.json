@@ -1,9 +1,12 @@
 {
-    "docwriter.style": "Auto-detect",
-    "docwriter.progress.trackClasses": true,
-    "python.testing.pytestArgs": [
-        "tests"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+  "docwriter.style": "JSDoc",
+  "docwriter.progress.trackClasses": false,
+  "python.testing.pytestArgs": ["tests"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "commentTranslate.targetLanguage": "ru",
+  "docwriter.language": "English",
+  "docwriter.progress.trackMethods": false,
+  "docwriter.progress.trackTypes": true,
+  "commentTranslate.hover.enabled": true
 }
