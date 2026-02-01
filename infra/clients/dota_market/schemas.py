@@ -1,43 +1,43 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Schema(BaseModel):
-    model_config = ConfigDict(frozen=True)
+    model_config = ConfigDict(frozen=True, populate_by_name=True)
 
 
 class Sale(Schema):
-    l_price: int  # Копейки (руб.)
-    l_time: int
+    price: int = Field(alias="l_price")  # Копейки (руб.)
+    timestamp: int = Field(alias="l_time")
 
 
 class ItemHistorySchema(Schema):
     success: bool
-    max: int  # Копейки (руб.)
-    min: int  # Копейки (руб.)
-    average: int  # Копейки (руб.)
-    number: int
+    max_price: int = Field(alias="max")  # Копейки (руб.)
+    min_price: int = Field(alias="min")  # Копейки (руб.)
+    avg_price: int = Field(alias="average")  # Копейки (руб.)
+    count_sales: int = Field(alias="number")
     history: list[Sale]
 
 
-class SellOffer(BaseModel):
+class SellOffer(Schema):
     price: int  # Копейки (руб.)
-    count: int
-    my_count: int
+    count_offers: int = Field(alias="count")
+    my_count_offers: int = Field(alias="my_count")
 
 
-class SellOffersSchema(BaseModel):
+class SellOffersSchema(Schema):
     success: bool
-    best_offer: int  # Копейки (руб.)
+    best_offer_price: int = Field(alias="best_offer")  # Копейки (руб.)
     offers: list[SellOffer]
 
 
-class BuyOffer(BaseModel):
-    o_price: int  # Копейки (руб.)
-    c: int  # count
-    my_count: int
+class BuyOffer(Schema):
+    price: int = Field(alias="o_price")  # Копейки (руб.)
+    count_offers: int = Field(alias="c")
+    my_count_offers: int = Field(alias="my_count")
 
 
-class BuyOffersSchema(BaseModel):
+class BuyOffersSchema(Schema):
     success: bool
-    best_offer: int  # Копейки (руб.)
+    best_offer_price: int = Field(alias="best_offer")  # Копейки (руб.)
     offers: list[BuyOffer]
