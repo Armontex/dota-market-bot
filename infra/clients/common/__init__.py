@@ -1,6 +1,6 @@
-from .async_http_client import AsyncHTTPClient
-from .rate_limiter import RateLimiter
-from enums import RequestMethod
+from .async_http_session import AsyncHTTPSession
+from .rate_limiter import RateLimiter, RateLimiterRegistry
+from .enums import RequestMethod
 
 
-__all__ = ["AsyncHTTPClient", "RequestMethod", "RateLimiter"]
+__all__ = ["AsyncHTTPSession", "RequestMethod", "RateLimiter", "RateLimiterRegistry"]

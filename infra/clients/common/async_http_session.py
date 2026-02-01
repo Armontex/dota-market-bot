@@ -10,7 +10,7 @@ from common.logger import logger
 from .enums import RequestMethod
 
 
-class AsyncHTTPClient:
+class AsyncHTTPSession:
 
     DEFAULT_TIMEOUT = 5  # Seconds
 

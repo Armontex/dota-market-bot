@@ -1,5 +1,6 @@
 import asyncio
 import time
+from typing import Any
 
 
 class RateLimiter:
@@ -20,3 +21,15 @@ class RateLimiter:
             if wait > 0:
                 await asyncio.sleep(wait)
             self._last_used = time.perf_counter()
+
+
+class RateLimiterRegistry:
+
+    def __init__(self, default_rps: int) -> None:
+        self._default_rps = default_rps
+        self._limiters: dict[Any, RateLimiter] = {}
+
+    def get(self, key: Any) -> RateLimiter:
+        if key not in self._limiters:
+            self._limiters[key] = RateLimiter(self._default_rps)
+        return self._limiters[key]
