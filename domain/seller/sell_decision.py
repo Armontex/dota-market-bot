@@ -1,19 +1,19 @@
 from domain.common.base import Decision
 from .base import SalesMarketAnalyzer
-from .value_objects import SellItemVO
-from .ports.dto import SellDecisionDTO
+from .dto.incoming import SellItem
+from .dto.outgoing import SellDecisionAnswer
 
 
 class SellDecision(Decision):
 
     def __init__(
         self,
-        item: SellItemVO,
+        item: SellItem,
         *,
         analyzer: SalesMarketAnalyzer,
     ) -> None:
         self._item = item
         self._analyzer = analyzer
 
-    def decide(self) -> SellDecisionDTO:
-        return SellDecisionDTO(price=self._analyzer.calc_selling_price(self._item))
+    def decide(self) -> SellDecisionAnswer:
+        return SellDecisionAnswer(price=self._analyzer.calc_selling_price(self._item))

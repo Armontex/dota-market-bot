@@ -2,8 +2,7 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from .ports.dto import MarketInfo
-    from .value_objects import SellItemVO
+    from .dto.incoming import MarketInfo, SellItem
 
 
 class SalesMarketAnalyzer(ABC):
@@ -12,5 +11,5 @@ class SalesMarketAnalyzer(ABC):
         self._info = market_info
 
     @abstractmethod
-    def calc_selling_price(self, item: SellItemVO) -> float:
+    def calc_selling_price(self, item: SellItem) -> int:
         raise NotImplementedError()
