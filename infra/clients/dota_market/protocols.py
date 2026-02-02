@@ -13,11 +13,6 @@ class IAsyncHTTPSession(Protocol):
     async def request(self, method: RequestMethod, url: str, **kwargs) -> IResponse: ...
 
 
-class IRateLimiter(Protocol):
-
-    async def wait(self) -> None: ...
-
-
 class IDotaMarketClient(Protocol):
 
     async def get_item_history(

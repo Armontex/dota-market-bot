@@ -7,7 +7,12 @@ from .protocols import IAsyncHTTPSession
 
 class DotaMarketClient:
 
-    def __init__(self, api_key: str, base_url: str, session: IAsyncHTTPSession) -> None:
+    def __init__(
+        self,
+        api_key: str,
+        base_url: str,
+        session: IAsyncHTTPSession,
+    ) -> None:
         self._session = session
         self._base_url = base_url
         self._headers = {"X-API-KEY": api_key}
