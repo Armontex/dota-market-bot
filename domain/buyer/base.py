@@ -1,8 +1,5 @@
-from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
-
-if TYPE_CHECKING:
-    from .dto.incoming import MarketInfo, BuyItem
+from .dto.incoming import MarketInfo, BuyItem
 
 
 class ShoppingMarketAnalyzer(ABC):
