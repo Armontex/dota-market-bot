@@ -15,6 +15,13 @@ class SellItem(BaseModel):
     min_price: int = Field(..., description="Минимальная цена (в копейках)")
     min_step: int = Field(1, description="Минимальный шаг перебития цены (в копейках)")
 
+    @field_validator("preferred_price")
+    @classmethod
+    def validate_preferred_price(cls, v: int):
+        if v <= 0:
+            raise ValueError(f"preferred_price должен быть > 0, получено {v}")
+        return v
+
     @field_validator("min_price")
     @classmethod
     def validate_min_price(cls, v: int):
