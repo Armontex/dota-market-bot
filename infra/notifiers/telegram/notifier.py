@@ -5,10 +5,6 @@ from pydantic import Field
 from common.logger import logger
 
 
-TelegramSender: TypeAlias = Literal["bot"]
-TelegramRecipient: TypeAlias = int
-
-
 class TextContent(DTO):
     text: str = Field(min_length=1, description="Текст сообщения")
 
@@ -18,7 +14,10 @@ class PhotoContent(DTO):
     caption: str | None = Field(..., description="Текст под фото")
 
 
+TelegramSender: TypeAlias = Literal["bot"]
+TelegramRecipient: TypeAlias = int
 TelegramContent: TypeAlias = TextContent | PhotoContent
+
 TelegramMessage: TypeAlias = BaseMessage[
     TelegramSender, TelegramRecipient, TelegramContent
 ]
