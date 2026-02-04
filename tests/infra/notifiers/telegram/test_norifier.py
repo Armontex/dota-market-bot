@@ -1,4 +1,5 @@
 import pytest
+from http import HTTPStatus
 from infra.notifiers.telegram import TelegramNotifier, TextContent, PhotoContent
 
 
@@ -21,4 +22,5 @@ async def test_telegram_notifier(chat_id, title, content, gateway):
         and result.message.meta.recipient == chat_id
         and result.message.meta.title == title
         and result.message.content == content
+        and isinstance(result.status, HTTPStatus)
     )

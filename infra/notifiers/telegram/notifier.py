@@ -36,4 +36,4 @@ class TelegramNotifier(BaseNotifier[TelegramMessage]):
     ) -> NotificationLog[TelegramMessage]:
         meta = TelegramMessageMeta(sender="bot", recipient=chat_id, title=title)
         message = TelegramMessage(meta=meta, content=content)
-        return await self._send_message(message)
+        return await super().send(message)

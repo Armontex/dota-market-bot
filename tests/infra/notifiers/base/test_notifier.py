@@ -22,7 +22,7 @@ async def test_base_notifier(gateway):
     Log = NotificationLog[ConcreteMessage]
 
     notifier = ConcreteNotifier(gateway)
-    result = await notifier._send_message(msg)
+    result = await notifier.send(msg)
 
     gateway.send_message.assert_awaited_once_with(msg)
     assert result == Log(message=msg, status=HTTPStatus.OK)

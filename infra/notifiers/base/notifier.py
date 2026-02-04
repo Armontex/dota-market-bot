@@ -14,7 +14,7 @@ class BaseNotifier[TMessage: BaseMessage](ABC):
     def _get_service_name(self) -> str:
         raise NotImplementedError()
 
-    async def _send_message(self, message: TMessage) -> NotificationLog[TMessage]:
+    async def send(self, message: TMessage) -> NotificationLog[TMessage]:
         logger.bind(recipient=message.meta.recipient, title=message.meta.title).info(
             f"Отправка уведомления в {self._get_service_name()}"
         )
