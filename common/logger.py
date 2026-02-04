@@ -1,7 +1,7 @@
 import sys
 from loguru import logger
-from core.const import LOG_DIR
-from core.settings import settings
+from config.const import LOG_DIR
+from config.settings import settings
 
 LOG_FORMAT = (
     "<green>{time:HH:mm:ss}</green> | <level>{level}</level> | "

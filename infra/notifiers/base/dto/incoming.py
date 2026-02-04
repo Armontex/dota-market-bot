@@ -1,12 +1,10 @@
 from pydantic import Field, field_validator, ValidationInfo
-from .base import DTO
+from core.base.decorators import abstract_pydantic_model
+from core.base.dto import DTO
 
 
-Sender = str | int
-Recipient = str | int
-
-
-class MessageMeta[TSender: Sender, TRecipient: Recipient](DTO):
+@abstract_pydantic_model
+class MessageMeta[TSender: str | int, TRecipient: str | int](DTO):
     sender: TSender = Field(..., description="Отправитель")
     recipient: TRecipient = Field(..., description="Получатель")
     title: str = Field(
@@ -22,6 +20,7 @@ class MessageMeta[TSender: Sender, TRecipient: Recipient](DTO):
         return v
 
 
+@abstract_pydantic_model
 class BaseMessage[TMeta: MessageMeta, TContent](DTO):
     meta: TMeta
     content: TContent = Field(..., description="Контент сообщения")

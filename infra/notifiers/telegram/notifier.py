@@ -1,8 +1,9 @@
 from typing import Literal
 from pydantic import Field
+from core.base.dto import DTO
 from ..base.protocols import INotifyGateway
 from ..base import BaseNotifier
-from ..base.dto import DTO, BaseMessage, MessageMeta
+from ..base.dto import BaseMessage, MessageMeta
 
 
 class TextContent(DTO):
@@ -16,8 +17,10 @@ class PhotoContent(DTO):
 
 Bot = Literal["bot"]
 ChatID = int
+MessageContent = TextContent | PhotoContent
 
-TelegramMessage = BaseMessage[MessageMeta[Bot, ChatID], TextContent | PhotoContent]
+TelegramMessageMeta = MessageMeta[Bot, ChatID]
+TelegramMessage = BaseMessage[TelegramMessageMeta, MessageContent]
 ITelegramGateway = INotifyGateway[TelegramMessage]
 
 
@@ -26,3 +29,8 @@ class TelegramNotifier(BaseNotifier[TelegramMessage]):
     @property
     def SERVICE_NAME(self) -> str:
         return "Telegram"
+
+    async def send(self, chat_id: ChatID, title: str, content: MessageContent):
+        meta = TelegramMessageMeta(sender="bot", recipient=chat_id, title=title)
+        message = TelegramMessage(meta=meta, content=content)
+        return await self._send_message(message)
