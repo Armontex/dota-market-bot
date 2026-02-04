@@ -1,1 +1,1 @@
-from .notifier import TelegramNotifier, TelegramMessage
+from .notifier import TelegramNotifier, TextContent, PhotoContent

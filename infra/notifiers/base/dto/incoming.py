@@ -4,7 +4,7 @@ from core.base.dto import DTO
 
 
 @abstract_pydantic_model
-class MessageMeta[TSender: str | int, TRecipient: str | int](DTO):
+class BaseMessageMeta[TSender: str | int, TRecipient: str | int](DTO):
     sender: TSender = Field(..., description="Отправитель")
     recipient: TRecipient = Field(..., description="Получатель")
     title: str = Field(
@@ -21,6 +21,6 @@ class MessageMeta[TSender: str | int, TRecipient: str | int](DTO):
 
 
 @abstract_pydantic_model
-class BaseMessage[TMeta: MessageMeta, TContent](DTO):
+class BaseMessage[TMeta: BaseMessageMeta, TContent](DTO):
     meta: TMeta
     content: TContent = Field(..., description="Контент сообщения")

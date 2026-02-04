@@ -10,14 +10,13 @@ class BaseNotifier[TMessage: BaseMessage](ABC):
     def __init__(self, gateway: INotifyGateway[TMessage]) -> None:
         self._gateway = gateway
 
-    @property
     @abstractmethod
-    def SERVICE_NAME(self) -> str:
+    def _get_service_name(self) -> str:
         raise NotImplementedError()
 
     async def _send_message(self, message: TMessage) -> NotificationLog[TMessage]:
         logger.bind(recipient=message.meta.recipient, title=message.meta.title).info(
-            f"Отправка уведомления в {self.SERVICE_NAME}"
+            f"Отправка уведомления в {self._get_service_name()}"
         )
         status = await self._gateway.send_message(message)
         return NotificationLog(message=message, status=status)
