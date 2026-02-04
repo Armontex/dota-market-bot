@@ -1,35 +1,23 @@
-from typing import Generic, TypeVar
 from abc import ABC, abstractmethod
+from common.logger import logger
 from .dto.incoming import BaseMessage
-from .dto.outgoing import BaseNotificationLog
+from .dto.outgoing import NotificationLog
 from .protocols import INotifyGateway
 
 
-TSender = TypeVar("TSender")
-TRecipient = TypeVar("TRecipient")
-TContent = TypeVar("TContent")
+class BaseNotifier[TMessage: BaseMessage](ABC):
 
-
-class BaseNotifier(Generic[TSender, TRecipient, TContent], ABC):
-
-    def __init__(self, gateway: INotifyGateway[TSender, TRecipient, TContent]) -> None:
+    def __init__(self, gateway: INotifyGateway[TMessage]) -> None:
         self._gateway = gateway
 
+    @property
     @abstractmethod
-    async def send(
-        self, message: BaseMessage[TSender, TRecipient, TContent]
-    ) -> BaseNotificationLog[TSender, TRecipient]:
+    def SERVICE_NAME(self) -> str:
         raise NotImplementedError()
 
-    async def _send_content(
-        self, message: BaseMessage[TSender, TRecipient, TContent]
-    ) -> BaseNotificationLog[TSender, TRecipient]:
-        status = await self._gateway.send_content(
-            sender=message.sender, recipient=message.recipient, content=message.content
+    async def send(self, message: TMessage) -> NotificationLog[TMessage]:
+        logger.bind(recipient=message.meta.recipient, title=message.meta.title).info(
+            f"Отправка уведомления в {self.SERVICE_NAME}"
         )
-        return BaseNotificationLog(
-            sender=message.sender,
-            recipient=message.recipient,
-            title=message.title,
-            status=status,
-        )
+        status = await self._gateway.send_message(message)
+        return NotificationLog(message=message, status=status)

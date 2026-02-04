@@ -1,14 +1,8 @@
-from typing import Generic, TypeVar, Protocol
+from typing import Protocol
 from http import HTTPStatus
+from .dto.incoming import BaseMessage
 
 
-TSender = TypeVar("TSender", contravariant=True)
-TRecipient = TypeVar("TRecipient", contravariant=True)
-TContent = TypeVar("TContent", contravariant=True)
+class INotifyGateway[TMessage: BaseMessage](Protocol):
 
-
-class INotifyGateway(Generic[TSender, TRecipient, TContent], Protocol):
-
-    async def send_content(
-        self, sender: TSender, recipient: TRecipient, content: TContent
-    ) -> HTTPStatus: ...
+    async def send_message(self, message: TMessage) -> HTTPStatus: ...

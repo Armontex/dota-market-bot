@@ -1,14 +1,12 @@
-from typing import Generic, TypeVar
 from pydantic import Field, field_validator, ValidationInfo
 from .base import DTO
 
 
-TSender = TypeVar("TSender")
-TRecipient = TypeVar("TRecipient")
-TContent = TypeVar("TContent")
+Sender = str | int
+Recipient = str | int
 
 
-class MessageMetaInfo(Generic[TSender, TRecipient], DTO):
+class MessageMeta[TSender: Sender, TRecipient: Recipient](DTO):
     sender: TSender = Field(..., description="Отправитель")
     recipient: TRecipient = Field(..., description="Получатель")
     title: str = Field(
@@ -19,18 +17,11 @@ class MessageMetaInfo(Generic[TSender, TRecipient], DTO):
 
     @field_validator("sender", "recipient")
     def validate_is_not_none(cls, v, info: ValidationInfo):
-        if v is None:
-            raise ValueError(f"{info.field_name} не может быть None")
+        if isinstance(v, str) and not v:
+            raise ValueError(f"{info.field_name} не может быть пустой строкой")
         return v
 
 
-class BaseMessage(
-    Generic[TSender, TRecipient, TContent], MessageMetaInfo[TSender, TRecipient], DTO
-):
+class BaseMessage[TMeta: MessageMeta, TContent](DTO):
+    meta: TMeta
     content: TContent = Field(..., description="Контент сообщения")
-
-    @field_validator("content")
-    def validate_content(cls, v):
-        if v is None:
-            raise ValueError(f"content не может быть None")
-        return v

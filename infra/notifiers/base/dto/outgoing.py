@@ -1,14 +1,11 @@
-from typing import Generic, TypeVar
 from pydantic import Field
 from http import HTTPStatus
+from typing import final
+from .incoming import BaseMessage
 from .base import DTO
-from .incoming import MessageMetaInfo
-
-TSender = TypeVar("TSender")
-TRecipient = TypeVar("TRecipient")
 
 
-class BaseNotificationLog(
-    Generic[TSender, TRecipient], MessageMetaInfo[TSender, TRecipient], DTO
-):
+@final
+class NotificationLog[TMessage: BaseMessage](DTO):
+    message: TMessage
     status: HTTPStatus = Field(..., description="Статус-код отправки уведомления")

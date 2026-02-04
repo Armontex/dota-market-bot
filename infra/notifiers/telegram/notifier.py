@@ -1,8 +1,8 @@
-from ..base import BaseNotifier
-from ..base.dto import DTO, BaseMessage, BaseNotificationLog
-from typing import TypeAlias, Literal
+from typing import Literal
 from pydantic import Field
-from common.logger import logger
+from ..base.protocols import INotifyGateway
+from ..base import BaseNotifier
+from ..base.dto import DTO, BaseMessage, MessageMeta
 
 
 class TextContent(DTO):
@@ -11,27 +11,18 @@ class TextContent(DTO):
 
 class PhotoContent(DTO):
     photo: bytes = Field(min_length=1, description="Фотография")
-    caption: str | None = Field(..., description="Текст под фото")
+    caption: str | None = Field(..., min_length=1, description="Текст под фото")
 
 
-TelegramSender: TypeAlias = Literal["bot"]
-TelegramRecipient: TypeAlias = int
-TelegramContent: TypeAlias = TextContent | PhotoContent
+Bot = Literal["bot"]
+ChatID = int
 
-TelegramMessage: TypeAlias = BaseMessage[
-    TelegramSender, TelegramRecipient, TelegramContent
-]
-TelegramNotificationLog: TypeAlias = BaseNotificationLog[
-    TelegramSender, TelegramRecipient
-]
+TelegramMessage = BaseMessage[MessageMeta[Bot, ChatID], TextContent | PhotoContent]
+ITelegramGateway = INotifyGateway[TelegramMessage]
 
 
-class TelegramNotifier(
-    BaseNotifier[TelegramSender, TelegramRecipient, TelegramContent]
-):
+class TelegramNotifier(BaseNotifier[TelegramMessage]):
 
-    async def send(self, message: TelegramMessage) -> TelegramNotificationLog:
-        logger.bind(
-            sender=message.sender, recipient=message.recipient, title=message.title
-        ).debug("Отправка уведомления через телеграм")
-        return await self._send_content(message)
+    @property
+    def SERVICE_NAME(self) -> str:
+        return "Telegram"

@@ -1,3 +1,3 @@
 from .base import DTO
-from .incoming import BaseMessage, MessageMetaInfo
-from .outgoing import BaseNotificationLog
+from .incoming import BaseMessage, MessageMeta
+from .outgoing import NotificationLog
