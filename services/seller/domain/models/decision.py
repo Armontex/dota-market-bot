@@ -1,6 +1,6 @@
 from pydantic import Field
-from domain.common.base import DTO
+from common.dto import DTO
 
 
-class SellDecisionAnswer(DTO):
+class Decision(DTO):
     price: int = Field(..., description="Цена продажи (в копейках)")

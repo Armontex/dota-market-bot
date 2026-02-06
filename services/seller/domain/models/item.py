@@ -1,16 +1,9 @@
-from pydantic import BaseModel, Field, field_validator, model_validator
-from domain.common.base import DTO
-from domain.common.dto.incoming import Offers, History
+from pydantic import Field, field_validator, model_validator
+from common.dto import DTO
 from typing import Self
 
 
-class MarketInfo(DTO):
-    sell_offers: Offers = Field(..., description="Офферы на продажу")
-    buy_offers: Offers = Field(..., description="Офферы на покупку")
-    history: History = Field(..., description="История покупок")
-
-
-class SellItem(BaseModel):
+class Item(DTO):
     preferred_price: int = Field(..., description="Предпочтительная цена (в копейках)")
     min_price: int = Field(..., description="Минимальная цена (в копейках)")
     min_step: int = Field(1, description="Минимальный шаг перебития цены (в копейках)")
