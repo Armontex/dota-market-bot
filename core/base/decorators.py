@@ -1,5 +1,8 @@
+from typing_extensions import deprecated
+
+
+@deprecated("Use common.decorators.abstract_pydantic_model")
 def abstract_pydantic_model(cls):
-    """Декоратор, запрещающий создание экземпляров декорируемого класса."""
     original_init = cls.__init__
 
     def new_init(self, *args, **kwargs):
