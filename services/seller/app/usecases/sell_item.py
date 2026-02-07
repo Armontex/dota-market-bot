@@ -16,6 +16,6 @@ class SellItemUseCase:
             item (Item): Объект предмета, для которого нужно принять решение о продаже.
 
         Returns:
-            Decision: Решение о продаже, содержащее информацию о цене и других параметрах. # FIXME: "и других параметрах."
+            Decision: Решение о продаже, содержащее информацию о цене.
         """
         return self._analyzer.calc_selling_price(item)
