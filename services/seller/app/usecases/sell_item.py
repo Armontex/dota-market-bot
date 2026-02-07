@@ -7,5 +7,5 @@ class SellItemUseCase:
     def __init__(self, analyzer: BaseMarketAnalyzer) -> None:
         self._analyzer = analyzer
 
-    def execute(self, item: Item, /, market_info: MarketInfo) -> Decision:
+    def execute(self, item: Item) -> Decision:
         return self._analyzer.calc_selling_price(item)
