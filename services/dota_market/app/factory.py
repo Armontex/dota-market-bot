@@ -1,6 +1,6 @@
-from infra.clients.common import RateLimiterRegistry
-from .protocols import IAsyncHTTPSession
-from .adapter import DotaMarketClient
+from ..infra.rate_limiter import RateLimiterRegistry
+from ..infra.client import DotaMarketClient
+from ..infra.client.protocols import IAsyncHTTPSession
 from .gateway import DotaMarketGateway
 
 

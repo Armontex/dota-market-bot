@@ -1,7 +1,6 @@
-import pytest
 import time
 import random
-from infra.clients.common import RateLimiter
+from services.dota_market.infra.rate_limiter import RateLimiter
 
 
 async def test_rate_limiter_wait():
@@ -13,13 +12,10 @@ async def test_rate_limiter_wait():
     rps = 5
     interval = 1 / rps
     limiter = RateLimiter(rps)
-    
+
     times = []
     for _ in range(random.randint(5, 15)):
         times.append(await some_method(limiter))
 
-
     for prev, curr in zip(times, times[1:]):
         assert curr - prev >= interval
-
-

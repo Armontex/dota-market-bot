@@ -178,3 +178,4 @@ pyrightconfig.json
 # Misc
 x.py
 .vscode/
+core/http/
