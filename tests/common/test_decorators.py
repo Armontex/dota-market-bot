@@ -5,12 +5,12 @@ from unittest.mock import AsyncMock
 
 
 # ==== abstract_pydantic_model ====
-from common.decorators import abstract_pydantic_model
+from common.decorators import abstract_model
 
 
 @pytest.fixture
 def abstract_model():
-    @abstract_pydantic_model
+    @abstract_model
     class AbstractModel(BaseModel):
         field: Any
 

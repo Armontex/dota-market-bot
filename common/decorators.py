@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from .logger import logger
 
 
-def abstract_pydantic_model[T: type](cls: T) -> T:
+def abstract_model[T: type](cls: T) -> T:
     """Декоратор, запрещающий создание экземпляров декорируемого класса."""
     original_init = cls.__init__
 
