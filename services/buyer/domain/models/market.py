@@ -1,5 +1,5 @@
 from pydantic import Field
-from common.pydantic_models import DTO
+from common.pydantic import DTO
 from datetime import datetime
 
 

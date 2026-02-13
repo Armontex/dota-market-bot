@@ -1,5 +1,5 @@
 from pydantic import Field, field_validator, model_validator
-from common.pydantic_models import DTO
+from common.pydantic import DTO
 from typing import Self
 
 

@@ -1,9 +1,10 @@
 from typing import Literal
 from pydantic import Field
-from common.pydantic_models import DTO
+from common.pydantic import DTO
 from ..base.protocols import IMessageSender
 from ..base.notifier import BaseNotifier
-from ..base.models import BaseMessage, BaseMessageMeta, NotificationLog
+from ..base.models import BaseMessage, BaseMessageMeta, Log
+from ...common.enums import NotificationChannel
 
 
 class TextContent(DTO):
@@ -29,12 +30,12 @@ ITelegramGateway = IMessageSender[TelegramMessage]
 # NOTESTED
 class TelegramNotifier(BaseNotifier[TelegramMessage]):
 
-    def _get_service_name(self) -> str:
-        return "Telegram"
+    def _get_service_name(self) -> NotificationChannel:
+        return NotificationChannel.TELEGRAM
 
     async def send(
         self, chat_id: ChatID, title: str, content: TelegramMessageContent
-    ) -> NotificationLog[TelegramMessage]:
+    ) -> Log[TelegramMessage]:
         meta = TelegramMessageMeta(sender="bot", recipient=chat_id, title=title)
         message = TelegramMessage(meta=meta, content=content)
         return await super().send(message)

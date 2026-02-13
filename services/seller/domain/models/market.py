@@ -1,6 +1,6 @@
 from pydantic import Field
 from datetime import datetime
-from common.pydantic_models import DTO
+from common.pydantic import DTO
 
 
 class Offer(DTO):

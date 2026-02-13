@@ -1,6 +1,6 @@
 from typing import Protocol
 from .models import BaseMessage
-from .enums import MessageStatus
+from ...common.enums import MessageStatus
 
 
 class IMessageSender[TMessage: BaseMessage](Protocol):

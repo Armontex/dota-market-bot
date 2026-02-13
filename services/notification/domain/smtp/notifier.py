@@ -3,9 +3,11 @@ from datetime import datetime, UTC
 from email.message import EmailMessage as _EmailMessage
 from email.utils import format_datetime
 from email.policy import Policy
-from ..base.models import NotificationLog, BaseMessage, BaseMessageMeta
+from ..base.models import Log, BaseMessage, BaseMessageMeta
 from ..base.protocols import IMessageSender
 from ..base.notifier import BaseNotifier
+from ...common.enums import NotificationChannel
+from .utils import cut_to_length
 
 
 # NOTESTED
@@ -38,14 +40,18 @@ SMTPGateway = IMessageSender[SMTPMessage]
 # NOTESTED
 class SMTPNotifier(BaseNotifier[SMTPMessage]):
 
-    def _get_service_name(self) -> str:
-        return "SMTP"
+    def _get_service_name(self) -> NotificationChannel:
+        return NotificationChannel.EMAIL
 
-    async def send(self, message: EmailMessage) -> NotificationLog[SMTPMessage]:
+    async def send(self, message: EmailMessage) -> Log[SMTPMessage]:
         meta = SMTPMessageMeta(
             sender=message["From"],
             recipient=message["To"],
-            title=message["Subject"] if message["Subject"] else "email message",
+            title=(
+                cut_to_length(message["Subject"], 250)
+                if message["Subject"]
+                else "email message"
+            ),
         )
         msg = SMTPMessage(meta=meta, content=message)
         return await super().send(msg)

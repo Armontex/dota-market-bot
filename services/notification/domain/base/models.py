@@ -1,18 +1,19 @@
 from pydantic import Field, field_validator, ValidationInfo
 from typing import final
-from common.decorators import abstract_pydantic_model
-from common.pydantic_models import DTO
-from .enums import MessageStatus
+from common.decorators import abstract_model
+from common.pydantic import DTO
+from ...common.enums import MessageStatus
 
 
 # NOTESTED
-@abstract_pydantic_model
+@abstract_model
 class BaseMessageMeta[TSender: str | int, TRecipient: str | int](DTO):
     sender: TSender = Field(..., description="Отправитель")
     recipient: TRecipient = Field(..., description="Получатель")
     title: str = Field(
         ...,
         min_length=1,
+        max_length=150,
         description="Заголовок сообщения (не входит в состав сообщения)",
     )
 
@@ -23,13 +24,13 @@ class BaseMessageMeta[TSender: str | int, TRecipient: str | int](DTO):
         return v
 
 
-@abstract_pydantic_model
+@abstract_model
 class BaseMessage[TMeta: BaseMessageMeta, TContent](DTO):
     meta: TMeta
     content: TContent = Field(..., description="Контент сообщения")
 
 
 @final
-class NotificationLog[TMessage: BaseMessage](DTO):
+class Log[TMessage: BaseMessage](DTO):
     message: TMessage
     status: MessageStatus = Field(..., description="Статус отправки уведомления")
