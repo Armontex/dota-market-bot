@@ -2,7 +2,7 @@ from pydantic import Field, field_validator, ValidationInfo
 from typing import final
 from common.decorators import abstract_model
 from common.pydantic import DTO
-from ...common.enums import MessageStatus
+from ..common.enums import MessageStatus
 
 
 # NOTESTED

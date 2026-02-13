@@ -1,7 +1,7 @@
 from common.db import Repository
 
 from services.notification.common.enums import NotificationChannel
-from services.notification.domain.base.models import Log
+from services.notification.bad.base.models import Log
 from .mappers import LogMapper
 
 

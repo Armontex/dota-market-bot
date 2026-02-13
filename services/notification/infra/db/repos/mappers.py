@@ -1,13 +1,14 @@
 from typing import Callable
-from services.notification.domain.base.models import Log
-from services.notification.domain.smtp.notifier import SMTPMessage
-from services.notification.domain.telegram.notifier import TelegramMessage
+from services.notification.bad.base.models import Log
+from services.notification.bad.smtp.notifier import SMTPMessage
+from services.notification.bad.telegram.notifier import TelegramMessage
 from ..models.notification_log import (
     EmailNotificationLog,
     NotificationLog,
     TelegramNotificationLog,
 )
 from services.notification.common.enums import NotificationChannel
+
 
 # NOTESTED
 class LogMapper:

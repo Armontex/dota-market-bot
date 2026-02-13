@@ -1,18 +1,20 @@
 from abc import ABC, abstractmethod
-from sqlalchemy.ext.asyncio import AsyncSession
 from common.logger import logger
 from .models import BaseMessage, Log
-from .protocols import IMessageSender
-from ...common.enums import NotificationChannel
-from ...infra.db.repos.notification_log import NotificationRepository
+from .protocols import IMessageSender, INotificationLogRepository
+from ..common.enums import NotificationChannel
 
 
 # NOTESTED
 class BaseNotifier[TMessage: BaseMessage](ABC):
 
-    def __init__(self, sender: IMessageSender[TMessage], session: AsyncSession) -> None:
+    def __init__(
+        self,
+        sender: IMessageSender[TMessage],
+        repo: INotificationLogRepository[TMessage],
+    ) -> None:
         self._sender = sender
-        self._notification_repo = NotificationRepository(session)
+        self._notification_repo = repo
 
     @abstractmethod
     def _get_service_name(self) -> NotificationChannel:

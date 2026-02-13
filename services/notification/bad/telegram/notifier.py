@@ -1,9 +1,8 @@
 from typing import Literal
 from pydantic import Field
+from sqlalchemy.ext.asyncio import AsyncSession
 from common.pydantic import DTO
-from ..base.protocols import IMessageSender
-from ..base.notifier import BaseNotifier
-from ..base.models import BaseMessage, BaseMessageMeta, Log
+from ..base import BaseMessage, BaseMessageMeta, BaseNotifier, IMessageSender, Log
 from ...common.enums import NotificationChannel
 
 
@@ -24,11 +23,14 @@ TelegramMessageContent = TextContent | PhotoContent
 
 TelegramMessageMeta = BaseMessageMeta[Bot, ChatID]
 TelegramMessage = BaseMessage[TelegramMessageMeta, TelegramMessageContent]
-ITelegramGateway = IMessageSender[TelegramMessage]
+ITelegramSender = IMessageSender[TelegramMessage]
 
 
 # NOTESTED
 class TelegramNotifier(BaseNotifier[TelegramMessage]):
+
+    def __init__(self, sender: ITelegramSender, session: AsyncSession) -> None:
+        super().__init__(sender, session)
 
     def _get_service_name(self) -> NotificationChannel:
         return NotificationChannel.TELEGRAM

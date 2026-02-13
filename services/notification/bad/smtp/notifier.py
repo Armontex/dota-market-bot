@@ -3,11 +3,11 @@ from datetime import datetime, UTC
 from email.message import EmailMessage as _EmailMessage
 from email.utils import format_datetime
 from email.policy import Policy
-from ..base.models import Log, BaseMessage, BaseMessageMeta
-from ..base.protocols import IMessageSender
-from ..base.notifier import BaseNotifier
-from ...common.enums import NotificationChannel
+
+from sqlalchemy.ext.asyncio import AsyncSession
 from .utils import cut_to_length
+from ..base import Log, BaseMessage, BaseMessageMeta, IMessageSender, BaseNotifier
+from ...common.enums import NotificationChannel
 
 
 # NOTESTED
@@ -34,11 +34,14 @@ class EmailMessage(_EmailMessage):
 
 SMTPMessageMeta = BaseMessageMeta[EmailStr, EmailStr]
 SMTPMessage = BaseMessage[SMTPMessageMeta, EmailMessage]
-SMTPGateway = IMessageSender[SMTPMessage]
+ISMTPSender = IMessageSender[SMTPMessage]
 
 
 # NOTESTED
 class SMTPNotifier(BaseNotifier[SMTPMessage]):
+
+    def __init__(self, sender: ISMTPSender, session: AsyncSession) -> None:
+        super().__init__(sender, session)
 
     def _get_service_name(self) -> NotificationChannel:
         return NotificationChannel.EMAIL
